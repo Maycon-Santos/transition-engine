@@ -6,10 +6,11 @@ const isDevServer = process.env.WEBPACK_DEV_SERVER
 
 module.exports = {
   entry: './src/index.ts',
-  mode: 'development',
+  mode: isDevServer? 'development' : 'production',
   output: {
     path: resolve(__dirname, 'dist'),
     filename: 'index.js',
+    libraryTarget: 'umd',
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
@@ -30,7 +31,7 @@ module.exports = {
       template: 'tests/index.html',
     }),
   ] : [
-    new DtsBundlePlugin()
+    // new DtsBundlePlugin()
   ],
 }
 

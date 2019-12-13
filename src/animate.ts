@@ -23,7 +23,7 @@ interface AnimateReturn {
   pause: () => void
 }
 
-export function animate (params: AnimateParams): AnimateReturn {
+export function Animate (params: AnimateParams): AnimateReturn {
   const {
     from,
     to,
