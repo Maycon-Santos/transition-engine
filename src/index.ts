@@ -3,6 +3,4 @@ import { easingFunctions } from './utils/easing-functions'
 
 export default animate
 
-export {
-  easingFunctions
-}
+export { easingFunctions }

@@ -20,7 +20,7 @@ describe('Transition engine test', () => {
         expect(lastProgressValue).toBe(1)
         expect(lastValue).toBe(toValue)
         done()
-      },
+      }
     })
 
     animation.start()
@@ -44,7 +44,7 @@ describe('Transition engine test', () => {
         expect(lastProgressValue).toBe(1)
         expect(lastValue).toBe(toValue)
         done()
-      },
+      }
     })
 
     animation.start()
@@ -74,7 +74,7 @@ describe('Transition engine test', () => {
       transition ({ progress, value }) {
         lastValue = value
         lastProgressValue = progress
-      },
+      }
     })
 
     animation.start()
@@ -109,7 +109,7 @@ describe('Transition engine test', () => {
       done () {
         expect(counties).toBe(iterationCount)
         done()
-      },
+      }
     })
 
     animation.start()
@@ -133,14 +133,15 @@ describe('Transition engine test', () => {
       done () {
         expect(counties).toBe(iterationCount)
         done()
-      },
+      }
     })
 
     animation.start()
   })
 
   test.each(['alternate', 'alternate-reverse'])(
-    'should repeat animation with iterationCount with direction %s', direction => {
+    'should repeat animation with iterationCount with direction %s',
+    direction => {
       const iterationCount = 3
       const toValue = 100
       let counties = 0
@@ -160,7 +161,7 @@ describe('Transition engine test', () => {
             },
             done () {
               resolve(counties)
-            },
+            }
           })
 
           animation.start()

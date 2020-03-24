@@ -14,7 +14,7 @@
   "lint-staged": {
     "*.{ts}": [
       "eslint --fix",
-      "prettier --parser flow --write",
+      "prettier-standard --parser flow --write",
       "jest --bail --findRelatedTests"
     ],
     "*.md": [
@@ -31,7 +31,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "husky": "^4.2.3",
-    "prettier": "^2.0.2",
+    "prettier-standard": "^16.2.1",
     "ts-jest": "^25.2.1"
   },
   "dependencies": {

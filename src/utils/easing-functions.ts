@@ -12,7 +12,7 @@ export interface EasingFunctionsInterface {
   easeInOutQuad: EasingFunction
   easeInCubic: EasingFunction
   easeOutCubic: EasingFunction
-  easeInOutCubic: EasingFunction,
+  easeInOutCubic: EasingFunction
   easeInQuart: EasingFunction
   easeOutQuart: EasingFunction
   easeInOutQuart: EasingFunction
@@ -44,7 +44,7 @@ export const easingFunctions: EasingFunctionsInterface = {
     return progress * progress * progress
   },
   easeOutCubic (progress: number): number {
-    return (--progress) * progress * progress + 1
+    return --progress * progress * progress + 1
   },
   easeInOutCubic (progress: number): number {
     if (progress < 0.5) {
@@ -58,13 +58,13 @@ export const easingFunctions: EasingFunctionsInterface = {
     return progress * progress * progress * progress
   },
   easeOutQuart (progress: number): number {
-    return 1 - (--progress) * progress * progress * progress
+    return 1 - --progress * progress * progress * progress
   },
   easeInOutQuart (progress: number): number {
     if (progress < 0.5) {
       return 8 * progress * progress * progress * progress
     } else {
-      return 1 - 8 * (--progress) * progress * progress * progress
+      return 1 - 8 * --progress * progress * progress * progress
     }
   },
   // Quint
@@ -72,13 +72,13 @@ export const easingFunctions: EasingFunctionsInterface = {
     return progress * progress * progress * progress * progress
   },
   easeOutQuint (progress: number): number {
-    return 1 + (--progress) * progress * progress * progress * progress
+    return 1 + --progress * progress * progress * progress * progress
   },
   easeInOutQuint (progress: number): number {
     if (progress < 0.5) {
       return 16 * progress * progress * progress * progress * progress
     } else {
-      return 1 + 16 * (--progress) * progress * progress * progress * progress
+      return 1 + 16 * --progress * progress * progress * progress * progress
     }
-  },
+  }
 }

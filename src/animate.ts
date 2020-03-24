@@ -8,7 +8,7 @@ interface Params {
   iterationCount?: number
   timingFunction?: EasingFunction
   direction?: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse'
-  transition: (Object: { progress: number, value: number }) => void
+  transition: (Object: { progress: number; value: number }) => void
   done?: () => void
 }
 
@@ -21,19 +21,25 @@ export function animate (params: Params) {
     iterationCount = 1,
     direction = 'normal',
     transition,
-    done,
+    done
   } = params
 
   let stopNow = false
   let paused = false
 
   return Object.freeze({
-    stop () { stopNow = true },
-    continue () { paused = false },
-    pause () { paused = true },
+    stop () {
+      stopNow = true
+    },
+    continue () {
+      paused = false
+    },
+    pause () {
+      paused = true
+    },
     start () {
       const range = to - from
-      let currentDirection: (1 | -1) = direction.includes('reverse') ? -1 : 1
+      let currentDirection: 1 | -1 = direction.includes('reverse') ? -1 : 1
       let iteration = 0
 
       stopNow = false
@@ -44,8 +50,9 @@ export function animate (params: Params) {
 
         const timeProgress = timeFraction / duration
         const progress = Math.min((range * timeProgress) / range, 1)
-        const valueProgress = from + ((to - from) * timingFunction(progress))
-        const value = currentDirection < 0 ? from + (to - valueProgress) : valueProgress
+        const valueProgress = from + (to - from) * timingFunction(progress)
+        const value =
+          currentDirection < 0 ? from + (to - valueProgress) : valueProgress
 
         transition({ progress, value })
 
@@ -66,6 +73,6 @@ export function animate (params: Params) {
 
         return 'continue'
       })
-    },
+    }
   })
 }
