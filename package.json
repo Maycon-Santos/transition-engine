@@ -10,7 +10,7 @@
     "build": "tsc",
     "prepublish": "yarn build",
     "lint": "eslint --fix",
-    "format": "prettier-standard --write src/**/*.ts",
+    "format": "prettier-standard --parser typescript --write src/**/*.ts",
     "test": "jest"
   },
   "husky": {
@@ -20,9 +20,9 @@
   },
   "lint-staged": {
     "*.ts": [
-      "format",
-      "lint",
-      "test"
+      "eslint --fix",
+      "prettier-standard",
+      "jest --bail --findRelatedTests"
     ]
   },
   "devDependencies": {
