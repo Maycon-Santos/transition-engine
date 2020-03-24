@@ -4,5 +4,5 @@ import { EasingFunctions } from './utils/easing-functions'
 export default Animate
 
 export {
-  EasingFunctions,
+  EasingFunctions
 }

@@ -1,29 +1,17 @@
 import { loop } from './utils/loop'
 import { EasingFunctions, EasingFunction } from './utils/easing-functions'
 
-interface AnimationFunctionParams {
-  progress: number
-  value: number
-}
-
-interface AnimateParams {
+interface Params {
   from: number
   to: number
   duration: number
   iterationCount?: number
   timingFunction?: EasingFunction
   direction?: 'normal' | 'reverse' | 'alternate' |'alternate-reverse'
-  animationFunction: (Object: AnimationFunctionParams) => void
+  animationFunction: (Object: { progress: number, value: number }) => void
 }
 
-interface AnimateReturn {
-  start: () => void
-  stop: () => void
-  continue: () => void
-  pause: () => void
-}
-
-export function Animate (params: AnimateParams): AnimateReturn {
+export function Animate (params: Params) {
   const {
     from,
     to,

@@ -1,6 +1,6 @@
-type Callback = (timeFraction: number) => 'continue' | 'stop' | 'restart' | 'pause'
+type TCallback = (timeFraction: number) => 'continue' | 'stop' | 'restart' | 'pause'
 
-export function loop (callback: Callback): void {
+export function loop (callback: TCallback): void {
   let start: number
   let lastTime: number
 
