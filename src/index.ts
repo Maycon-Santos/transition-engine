@@ -1,7 +1,7 @@
-import { transition } from './transition'
+import { animate } from './animate'
 import { easingFunctions } from './utils/easing-functions'
 
-export default transition
+export default animate
 
 export {
   easingFunctions

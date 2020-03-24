@@ -7,11 +7,12 @@ interface Params {
   duration: number
   iterationCount?: number
   timingFunction?: EasingFunction
-  direction?: 'normal' | 'reverse' | 'alternate' |'alternate-reverse'
-  animationFunction: (Object: { progress: number, value: number }) => void
+  direction?: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse'
+  transition: (Object: { progress: number, value: number }) => void
+  done?: () => void
 }
 
-export function transition (params: Params) {
+export function animate (params: Params) {
   const {
     from,
     to,
@@ -19,7 +20,8 @@ export function transition (params: Params) {
     timingFunction = easingFunctions.linear,
     iterationCount = 1,
     direction = 'normal',
-    animationFunction,
+    transition,
+    done,
   } = params
 
   let stopNow = false
@@ -45,7 +47,7 @@ export function transition (params: Params) {
         const valueProgress = from + ((to - from) * timingFunction(progress))
         const value = currentDirection < 0 ? from + (to - valueProgress) : valueProgress
 
-        animationFunction({ progress, value })
+        transition({ progress, value })
 
         if (progress >= 1) {
           iteration++
@@ -54,7 +56,12 @@ export function transition (params: Params) {
             currentDirection *= -1
           }
 
-          return iteration < iterationCount ? 'restart' : 'stop'
+          if (iteration < iterationCount) {
+            return 'restart'
+          }
+
+          if (done) done()
+          return 'stop'
         }
 
         return 'continue'
