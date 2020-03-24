@@ -11,6 +11,16 @@
     "prepublish": "yarn build",
     "test": "jest"
   },
+  "lint-staged": {
+    "*.{ts}": [
+      "eslint --fix",
+      "prettier --parser flow --write",
+      "jest --bail --findRelatedTests"
+    ],
+    "*.md": [
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
@@ -28,6 +38,7 @@
     "awesome-typescript-loader": "^5.2.1",
     "eslint-loader": "^3.0.3",
     "jest": "^25.1.0",
+    "lint-staged": "^10.0.9",
     "typescript": "^3.7.3"
   }
 }
