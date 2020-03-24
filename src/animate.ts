@@ -10,7 +10,7 @@ interface AnimateParams {
   from: number
   to: number
   duration: number
-  iterationCount: number
+  iterationCount?: number
   timingFunction?: EasingFunction
   direction?: 'normal' | 'reverse' | 'alternate' |'alternate-reverse'
   animationFunction: (Object: AnimationFunctionParams) => void
