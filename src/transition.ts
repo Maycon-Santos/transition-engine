@@ -1,5 +1,5 @@
 import { loop } from './utils/loop'
-import { EasingFunctions, EasingFunction } from './utils/easing-functions'
+import { easingFunctions, EasingFunction } from './utils/easing-functions'
 
 interface Params {
   from: number
@@ -11,12 +11,12 @@ interface Params {
   animationFunction: (Object: { progress: number, value: number }) => void
 }
 
-export function Animate (params: Params) {
+export function transition (params: Params) {
   const {
     from,
     to,
     duration,
-    timingFunction = EasingFunctions.linear,
+    timingFunction = easingFunctions.linear,
     iterationCount = 1,
     direction = 'normal',
     animationFunction,

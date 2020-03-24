@@ -21,7 +21,7 @@ export interface EasingFunctionsInterface {
   easeInOutQuint: EasingFunction
 }
 
-export const EasingFunctions: EasingFunctionsInterface = {
+export const easingFunctions: EasingFunctionsInterface = {
   linear (progress: number): number {
     return progress
   },
