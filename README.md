@@ -61,6 +61,7 @@ It receives a function that handles the delta time to generate effects in the tr
 ```javascript
 progress => --progress * progress * progress + 1
 ```
+_[Learn more about easing functions.](https://easings.net/)_  
 But to facilitate our work, the project has a list of easing functions. Example:
 ```javascript
 import animate, { easingFunctions } from 'transition-engine'
@@ -71,7 +72,6 @@ const animation = animate({
 })
 ```
 **[Easing functions avaiable.](#easingFunctions)**  
-_[Learn more about easing functions.](https://easings.net/)_
 
 ### direction
 - **normal:** The animation is played as normal (forwards). This is default
