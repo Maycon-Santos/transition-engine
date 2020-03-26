@@ -37,7 +37,7 @@ export function animate (params: Params) {
     pause () {
       paused = true
     },
-    start () {
+    start (callback?: () => void) {
       const range = to - from
       let currentDirection: 1 | -1 = direction.includes('reverse') ? -1 : 1
       let iteration = 0
@@ -68,6 +68,7 @@ export function animate (params: Params) {
           }
 
           if (done) done()
+          if (callback) callback()
           return 'stop'
         }
 
