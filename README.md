@@ -29,14 +29,14 @@ animation.start()
 
 ## Properties
 ```typescript
-  from: number
-  to: number
-  duration: number
-  iterationCount?: number
-  timingFunction?: EasingFunction
-  direction?: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse'
-  transition: (Object: { progress: number; value: number }) => void
-  done?: () => void
+from: number
+to: number
+duration: number
+iterationCount?: number
+timingFunction?: EasingFunction
+direction?: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse'
+transition: (Object: { progress: number; value: number }) => void
+done?: () => void
 ```
 
 ### from

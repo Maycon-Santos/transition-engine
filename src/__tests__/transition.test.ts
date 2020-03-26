@@ -26,6 +26,29 @@ describe('Transition engine test', () => {
     animation.start()
   })
 
+  it('should call callback on the end of the animation', done => {
+    const doneSpy = jest.fn()
+    const startCallbackSpy = jest.fn()
+
+    const animation = animate({
+      from: 0,
+      to: 1,
+      duration: 100,
+      transition () {
+        /* do it */
+      },
+      done: doneSpy
+    })
+
+    animation.start(startCallbackSpy)
+
+    setTimeout(() => {
+      expect(doneSpy).toBeCalled()
+      expect(startCallbackSpy).toBeCalled()
+      done()
+    }, 200)
+  })
+
   it('should pause and continue with last values', done => {
     const toValue = 100
     const duration = 500

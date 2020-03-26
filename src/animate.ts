@@ -6,7 +6,7 @@ interface Params {
   to: number
   duration: number
   iterationCount?: number
-  timingFunction?: EasingFunction
+  timingFunction?: EasingFunction | EasingFunction[]
   direction?: 'normal' | 'reverse' | 'alternate' | 'alternate-reverse'
   transition: (Object: { progress: number; value: number }) => void
   done?: () => void
@@ -40,10 +40,11 @@ export function animate (params: Params) {
     get isPaused () {
       return paused
     },
-    start () {
+    start (callback?: () => void) {
       const range = to - from
       let currentDirection: 1 | -1 = direction.includes('reverse') ? -1 : 1
       let iteration = 0
+      let currentTimingFunctionKey = 0
 
       stopNow = false
 
@@ -51,9 +52,13 @@ export function animate (params: Params) {
         if (stopNow) return 'stop'
         if (paused) return 'pause'
 
+        const currentTimingFunction = Array.isArray(timingFunction)
+          ? timingFunction[currentTimingFunctionKey]
+          : timingFunction
         const timeProgress = timeFraction / duration
         const progress = Math.min((range * timeProgress) / range, 1)
-        const valueProgress = from + (to - from) * timingFunction(progress)
+        const valueProgress =
+          from + (to - from) * currentTimingFunction(progress)
         const value =
           currentDirection < 0 ? from + (to - valueProgress) : valueProgress
 
@@ -61,6 +66,12 @@ export function animate (params: Params) {
 
         if (progress >= 1) {
           iteration++
+
+          if (currentTimingFunctionKey + 1 < iterationCount) {
+            currentTimingFunctionKey++
+          } else {
+            currentTimingFunctionKey = 0
+          }
 
           if (direction.includes('alternate')) {
             currentDirection *= -1
@@ -71,6 +82,7 @@ export function animate (params: Params) {
           }
 
           if (done) done()
+          if (callback) callback()
           return 'stop'
         }
 
