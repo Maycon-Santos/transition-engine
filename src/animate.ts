@@ -37,6 +37,9 @@ export function animate (params: Params) {
     pause () {
       paused = true
     },
+    get isPaused () {
+      return paused
+    },
     start (callback?: () => void) {
       const range = to - from
       let currentDirection: 1 | -1 = direction.includes('reverse') ? -1 : 1

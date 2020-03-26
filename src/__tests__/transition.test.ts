@@ -77,6 +77,7 @@ describe('Transition engine test', () => {
       const currentProgress = lastProgressValue
       animation.pause()
       setTimeout(() => {
+        expect(animation.isPaused).toBe(true)
         expect(currentValue).toBe(lastValue)
         expect(currentProgress).toBe(lastProgressValue)
         animation.continue()
