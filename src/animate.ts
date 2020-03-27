@@ -70,6 +70,8 @@ export function animate (params: Params) {
       stopNow = false
       running = true
 
+      if (iterationChange) iterationChange(0)
+
       loop(timeFraction => {
         if (stopNow) return 'stop'
         if (paused) return 'pause'
@@ -91,9 +93,10 @@ export function animate (params: Params) {
         transition({ progress, iterationProgress, value, iteration })
 
         if (iterationProgress >= 1) {
-          if (iterationChange) iterationChange(iteration)
-
           iteration++
+
+          if (iterationChange && iteration < iterationCount)
+            iterationChange(iteration)
 
           if (direction.includes('alternate')) {
             currentDirection *= -1
