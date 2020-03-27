@@ -1,24 +1,145 @@
 import { animate } from '../animate'
 
 describe('Transition engine test', () => {
-  it('should return the progress and value', done => {
+  it('should return the value', done => {
     const toValue = 100
-    let lastProgressValue = -1
     let lastValue = -1
 
     const animation = animate({
       from: 0,
       to: toValue,
       duration: 100,
-      transition ({ progress, value }) {
-        expect(progress).toBeGreaterThan(lastProgressValue)
+      transition ({ value }) {
         expect(value).toBeGreaterThan(lastValue)
-        lastProgressValue = progress
         lastValue = value
       },
       done () {
-        expect(lastProgressValue).toBe(1)
         expect(lastValue).toBe(toValue)
+        done()
+      }
+    })
+
+    animation.start()
+  })
+
+  it('should return the iterationProgress', done => {
+    const toValue = 100
+    let lastIterationProgressValue = -1
+
+    const animation = animate({
+      from: 0,
+      to: toValue,
+      duration: 100,
+      transition ({ iterationProgress }) {
+        expect(iterationProgress).toBeGreaterThan(lastIterationProgressValue)
+        lastIterationProgressValue = iterationProgress
+      },
+      done () {
+        expect(lastIterationProgressValue).toBe(1)
+        done()
+      }
+    })
+
+    animation.start()
+  })
+
+  it('should return the progress', done => {
+    const toValue = 100
+    let lastProgressValue = -1
+
+    const animation = animate({
+      from: 0,
+      to: toValue,
+      duration: 100,
+      iterationCount: 3,
+      transition ({ progress }) {
+        expect(progress).toBeGreaterThanOrEqual(lastProgressValue)
+        lastProgressValue = progress
+      },
+      done () {
+        expect(lastProgressValue).toBe(1)
+        done()
+      }
+    })
+
+    animation.start()
+  })
+
+  it("should run with multiple duration's", done => {
+    const durations = [100, 200, 300]
+
+    let start = performance.now()
+
+    const animation = animate({
+      from: 0,
+      to: -100,
+      duration: durations,
+      iterationCount: 3,
+      transition () {
+        /* do it */
+      },
+      iterationChange (iteration) {
+        expect(performance.now() - start).toBeLessThanOrEqual(
+          durations[iteration] + 40
+        )
+        start = performance.now()
+      },
+      done () {
+        done()
+      }
+    })
+
+    animation.start()
+  })
+
+  it("should returns multiple from's values", done => {
+    const fromValues = [100, -200, -300]
+
+    let lastIterationValue: number
+    const passedFromValues: number[] = []
+
+    const animation = animate({
+      from: fromValues,
+      to: 100,
+      duration: 100,
+      iterationCount: 3,
+      transition ({ value, iteration }) {
+        if (iteration !== lastIterationValue) {
+          lastIterationValue = iteration
+          passedFromValues.push(value)
+        }
+      },
+      done () {
+        expect(passedFromValues).toStrictEqual(fromValues)
+        done()
+      }
+    })
+
+    animation.start()
+  })
+
+  it("should returns multiple to's values", done => {
+    const toValues = [100, -200, 300]
+
+    let lastIterationValue: number
+    let lastValue: number
+    const passedToValues: number[] = []
+
+    const animation = animate({
+      from: 100,
+      to: toValues,
+      duration: 100,
+      iterationCount: 3,
+      transition ({ value, iteration }) {
+        if (iteration !== lastIterationValue) {
+          lastIterationValue = iteration
+          if (lastValue) passedToValues.push(lastValue)
+        }
+        lastValue = value
+      },
+      done () {
+        passedToValues.push(lastValue)
+        expect(passedToValues).toStrictEqual(toValues)
         done()
       }
     })
@@ -49,22 +170,47 @@ describe('Transition engine test', () => {
     }, 200)
   })
 
+  it('should return iteration value when change', done => {
+    const iterationChangeSpy = jest.fn()
+    const iterationValues: number[] = []
+
+    const animation = animate({
+      from: 0,
+      to: 1,
+      duration: 100,
+      iterationCount: 5,
+      transition ({ iteration }) {
+        if (!iterationValues.includes(iteration)) {
+          iterationValues.push(iteration)
+        }
+      },
+      iterationChange: iterationChangeSpy,
+      done () {
+        expect(iterationValues).toStrictEqual([0, 1, 2, 3, 4])
+        expect(iterationChangeSpy.mock.calls).toEqual([[0], [1], [2], [3], [4]])
+        done()
+      }
+    })
+
+    animation.start()
+  })
+
   it('should pause and continue with last values', done => {
     const toValue = 100
     const duration = 500
-    let lastProgressValue = -1
+    let lastIterationProgressValue = -1
     let lastValue = -1
 
     const animation = animate({
       from: 0,
       to: toValue,
       duration,
-      transition ({ progress, value }) {
+      transition ({ iterationProgress, value }) {
         lastValue = value
-        lastProgressValue = progress
+        lastIterationProgressValue = iterationProgress
       },
       done () {
-        expect(lastProgressValue).toBe(1)
+        expect(lastIterationProgressValue).toBe(1)
         expect(lastValue).toBe(toValue)
         done()
       }
@@ -74,30 +220,75 @@ describe('Transition engine test', () => {
 
     setTimeout(() => {
       const currentValue = lastValue
-      const currentProgress = lastProgressValue
+      const currentProgress = lastIterationProgressValue
       animation.pause()
       setTimeout(() => {
-        expect(animation.isPaused).toBe(true)
         expect(currentValue).toBe(lastValue)
-        expect(currentProgress).toBe(lastProgressValue)
+        expect(currentProgress).toBe(lastIterationProgressValue)
         animation.continue()
       }, 1000)
+    }, duration / 2)
+  })
+
+  it('should paused property be true when the loop is paused', done => {
+    const toValue = 100
+    const duration = 500
+
+    const animation = animate({
+      from: 0,
+      to: toValue,
+      duration,
+      transition () {
+        /* do it */
+      }
+    })
+
+    animation.start()
+
+    setTimeout(() => {
+      animation.pause()
+      expect(animation.paused).toBe(true)
+      done()
+    }, duration / 2)
+  })
+
+  it('should running property be true when the loop is paused or started', done => {
+    const toValue = 100
+    const duration = 500
+
+    const animation = animate({
+      from: 0,
+      to: toValue,
+      duration,
+      transition () {
+        /* do it */
+      }
+    })
+
+    animation.start()
+
+    expect(animation.running).toBe(true)
+
+    setTimeout(() => {
+      animation.pause()
+      expect(animation.running).toBe(true)
+      done()
     }, duration / 2)
   })
 
   it('should stop loop', done => {
     const toValue = 100
     const duration = 500
-    let lastProgressValue = -1
+    let lastIterationProgressValue = -1
     let lastValue = -1
 
     const animation = animate({
       from: 0,
       to: toValue,
       duration,
-      transition ({ progress, value }) {
+      transition ({ iterationProgress, value }) {
         lastValue = value
-        lastProgressValue = progress
+        lastIterationProgressValue = iterationProgress
       }
     })
 
@@ -105,11 +296,11 @@ describe('Transition engine test', () => {
 
     setTimeout(() => {
       const currentValue = lastValue
-      const currentProgress = lastProgressValue
+      const currentProgress = lastIterationProgressValue
       animation.stop()
       setTimeout(() => {
         expect(currentValue).toBe(lastValue)
-        expect(currentProgress).toBe(lastProgressValue)
+        expect(currentProgress).toBe(lastIterationProgressValue)
         done()
       }, 1000)
     }, duration / 2)
@@ -125,8 +316,8 @@ describe('Transition engine test', () => {
       to: toValue,
       duration: 100,
       iterationCount,
-      transition ({ progress, value }) {
-        if (progress === 1 && value === toValue) {
+      transition ({ iterationProgress, value }) {
+        if (iterationProgress === 1 && value === toValue) {
           counties++
         }
       },
@@ -149,8 +340,8 @@ describe('Transition engine test', () => {
       duration: 100,
       direction: 'reverse',
       iterationCount,
-      transition ({ progress, value }) {
-        if (progress === 1 && value === 0) {
+      transition ({ iterationProgress, value }) {
+        if (iterationProgress === 1 && value === 0) {
           counties++
         }
       },
@@ -178,8 +369,11 @@ describe('Transition engine test', () => {
             duration: 100,
             direction: direction as 'alternate' | 'alternate-reverse',
             iterationCount,
-            transition ({ progress, value }) {
-              if (progress === 1 && (value === 0 || value === toValue)) {
+            transition ({ iterationProgress, value }) {
+              if (
+                iterationProgress === 1 &&
+                (value === 0 || value === toValue)
+              ) {
                 counties++
               }
             },

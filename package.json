@@ -1,11 +1,15 @@
 {
   "name": "transition-engine",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "author": "Maycon Santos",
+  "author": "Maycon Santos <mayconsantos.dev@gmail.com>",
   "license": "MIT",
   "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Maycon-Santos/transition-engine"
+  },
   "scripts": {
     "build": "tsc",
     "prepublish": "tsc",
@@ -26,6 +30,7 @@
     ]
   },
   "devDependencies": {
+    "@types/jest": "^25.1.4",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "eslint": "^6.8.0",
@@ -35,15 +40,11 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "husky": "^4.2.3",
-    "prettier-standard": "^16.2.1",
-    "ts-jest": "^25.2.1"
-  },
-  "dependencies": {
-    "@types/jest": "^25.1.4",
-    "awesome-typescript-loader": "^5.2.1",
-    "eslint-loader": "^3.0.3",
     "jest": "^25.1.0",
     "lint-staged": "^10.0.9",
+    "prettier-standard": "^16.2.1",
+    "ts-jest": "^25.2.1",
     "typescript": "^3.7.3"
-  }
+  },
+  "dependencies": {}
 }
